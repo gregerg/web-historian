@@ -11,8 +11,7 @@ var server = app.listen(8080, function() {
     console.log('Listening on port %d', server.address().port);
 });
 
-app.get('/',function(req,res){
 
-  // res.send(200,archive.paths.list);
-  res.status(200).send('<input>');
-});
+// app.use(express.static(__dirname + '/public'));
+
+app.use('/', handler);
