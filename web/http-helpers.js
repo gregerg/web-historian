@@ -1,4 +1,5 @@
 var path = require('path');
+var http = require('http');
 var fs = require('fs');
 var archive = require('../helpers/archive-helpers');
 exports.headers = headers = {
@@ -10,4 +11,35 @@ exports.headers = headers = {
 };
 
 
-// As you progress, keep thinking about what helper functions you can put here!
+
+
+exports.fetchPageAsync = function(url){
+  var options = {
+    hostname: url,
+    port: 80,
+    path: '/',
+    method: 'GET'
+  };
+  console.log('Start fetching');
+
+  var req = http.request(options, function(res) {
+    console.log('STATUS: ' + res.statusCode);
+    console.log('HEADERS: ' + JSON.stringify(res.headers));
+    res.setEncoding('utf8');
+    var data = '';
+    res.on('data', function (chunk) {
+        data += chunk;
+      });
+    res.on('end',function(){
+      archive.archiveUrl(url,data,Date.now()).then(function() {
+        console.log("hello we are totes promisified");
+      });
+    });
+
+  });
+  req.on('error', function(e) {
+    console.log('problem with request: ' + e.message);
+  });
+
+  req.end();
+}

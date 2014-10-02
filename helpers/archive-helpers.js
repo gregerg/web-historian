@@ -1,7 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
-
+var q = require('q');
 /*
  * You will need to reuse the same paths many times over in the course of this sprint.
  * Consider using the `paths` object below to store frequently used file paths. This way,
@@ -31,6 +31,7 @@ exports.initialize = function(pathsObj){
 // modularize your code. Keep it clean!
 
 exports.readListOfUrls = function(){
+  return index;
 };
 
 exports.isUrlInList = function(domain) {
@@ -55,6 +56,19 @@ exports.downloadUrls = function(){
 
 };
 
+exports.archiveUrl = function(url,data,timestamp){
+  //create the file name 'url'
+  //write data to the file
+  var d = q.defer();
+  fs.writeFile(paths['archivedSites']+'/'+url, data, function(err) {
+    if (err) throw err;
+    d.resolve();
+  });
+  //for extra credit (in the future) append a timestamp to the name? dunno!
+
+  return d.promise;
+}
+// archiveUrl().then(function(data){ // Success!!!};)
 exports.makeIndex = function(){
   fs.readFile(paths.list,{encoding:'utf8'},function(err,data){
     if(err) throw err;
