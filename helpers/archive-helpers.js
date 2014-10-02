@@ -14,6 +14,9 @@ var paths = {
   'list' : path.join(__dirname, '../archives/sites.txt')
 };
 
+var index = {};
+
+
 exports.paths = paths;
 
 
@@ -30,19 +33,25 @@ exports.initialize = function(pathsObj){
 exports.readListOfUrls = function(){
 };
 
-exports.isUrlInList = function(){
+exports.isUrlInList = function(domain) {
+  return index.hasOwnProperty(domain);
 };
 
-exports.addUrlToList = function(){
+exports.addUrlToList = function(domain,callback) {
+  var temp = '\n'+domain;
+  fs.appendFile(paths.list,temp,function(err){
+    if(err) res.status(500).send('Our index exploded far!')
+    console.log('Someone saved a file on us!');
+    index[domain] = true;
+    callback();
+  });
 };
 
-exports.isURLArchived = function(){
+exports.isURLArchived = function(domain,callback){
+  fs.exists(paths.archivedSites+'/'+domain,callback)
 };
 
 exports.downloadUrls = function(){
-};
-// TODO: Map the naming convension
-var index = {
 
 };
 
@@ -58,20 +67,11 @@ exports.makeIndex = function(){
   });
 };
 
-exports.addDomain = function(domain,callback) {
-  var temp = '\n'+domain;
-  fs.appendFile(paths.list,temp,function(err){
-    if(err) res.status(500).send('Our index exploded far!')
-    console.log('Someone saved a file on us!');
-    index[domain] = true;
-    callback();
-  });
-};
+//addUrlToList
+//exports.addDomain =
 
-exports.isArchived = function(domain,callback){
-  fs.exists(paths.archivedSites+'/'+domain,callback)
-}
+//isUrlArchived
+// exports.isArchived =
 
-exports.hasDomain = function(domain) {
-  return index.hasOwnProperty(domain);
-};
+//isUrlInList
+// exports.hasDomain =

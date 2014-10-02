@@ -14,9 +14,9 @@ archive.makeIndex();
 
 router.post('/',function(req,res){
   var domain = req.body.url;
-  if(archive.hasDomain(domain)){
+  if(archive.isUrlInList(domain)){
     // redirect to our get.
-    archive.isArchived(domain, function(exists){
+    archive.isURLArchived(domain, function(exists){
       if(exists){
         res.redirect(302,'/sites/'+domain);
       }else{
@@ -25,7 +25,7 @@ router.post('/',function(req,res){
     })
   }else{
     // create it! (add it to the archive)
-    archive.addDomain(domain,function(){
+    archive.addUrlToList(domain,function(){
       res.redirect(302,'/loading.html');
     });
   }
