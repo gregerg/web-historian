@@ -8,15 +8,15 @@ var router = express.Router();
 var helpers = require('./http-helpers.js');
 
 
-helpers.makeIndex();
+archive.makeIndex();
 
 // lol, deleted everything
 
 router.post('/',function(req,res){
   var domain = req.body.url;
-  if(helpers.hasDomain(domain)){
+  if(archive.hasDomain(domain)){
     // redirect to our get.
-    helpers.isArchived(domain, function(exists){
+    archive.isArchived(domain, function(exists){
       if(exists){
         res.redirect(302,'/sites/'+domain);
       }else{
@@ -25,7 +25,7 @@ router.post('/',function(req,res){
     })
   }else{
     // create it! (add it to the archive)
-    helpers.addDomain(domain,function(){
+    archive.addDomain(domain,function(){
       res.redirect(302,'/loading.html');
     });
   }
