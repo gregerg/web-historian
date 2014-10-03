@@ -69,7 +69,7 @@ exports.archiveUrl = function(url,data,timestamp){
   return d.promise;
 }
 // archiveUrl().then(function(data){ // Success!!!};)
-exports.makeIndex = function(){
+exports.makeIndex = function(callback){
   fs.readFile(paths.list,{encoding:'utf8'},function(err,data){
     if(err) throw err;
     var lines = data.split('\n');
@@ -77,7 +77,7 @@ exports.makeIndex = function(){
     for(var i = 0; i < lines.length; i++){
       index[lines[i]] = i;
     }
-    console.log('Successfully populated index!');
+    if(callback){callback()};
   });
 };
 
